@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState, useEffect } from 'react';
+import Title from './components/Title';
+import Description from './components/Description';
+import Products from './components/Products';
 
 function App() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch('/products.json')
+      .then(response => response.json())
+      .then(data => setProducts(data))
+      .catch(error => console.error('Error loading products:', error));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Title>Produtos Disponíveis</Title>
+      <Description>Aqui você encontra uma variedade de produtos!</Description>
+      <Products products={products} />
     </div>
   );
 }
