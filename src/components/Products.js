@@ -9,15 +9,15 @@ const ProductsContainer = styled.div`
   justify-content: center;
 `;
 
-const Products = ({ products }) => {
+const Products = ({ products, expandedProductId, onProductClick }) => {
   return (
     <ProductsContainer>
       {products.map(product => (
         <Card
           key={product.id}
-          title={product.title}
-          description={product.description}
-          imageUrl={product.imageUrl}
+          product={product}
+          expanded={product.id === expandedProductId}
+          onProductClick={onProductClick}
         />
       ))}
     </ProductsContainer>

@@ -1,24 +1,40 @@
 // src/App.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Title from './components/Title';
 import Description from './components/Description';
 import Products from './components/Products';
+import useProducts from './hooks/useProducts';
 
 function App() {
-  const [products, setProducts] = useState([]);
+  const { products, loading, error } = useProducts();
+  const [expandedProductId, setExpandedProductId] = useState(null);
 
-  useEffect(() => {
-    fetch('/products.json')
-      .then(response => response.json())
-      .then(data => setProducts(data))
-      .catch(error => console.error('Error loading products:', error));
-  }, []);
+  const handleProductClick = (productId) => {
+    setExpandedProductId(productId);
+  };
+
+  const handleOutsideClick = () => {
+    setExpandedProductId(null);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
-    <div>
+    <div onClick={handleOutsideClick}>
       <Title>Produtos Disponíveis</Title>
       <Description>Aqui você encontra uma variedade de produtos!</Description>
-      <Products products={products} />
+      <Products 
+        products={products} 
+        expandedProductId={expandedProductId} 
+        onProductClick={handleProductClick} 
+        onOutsideClick={handleOutsideClick} 
+      />
     </div>
   );
 }
